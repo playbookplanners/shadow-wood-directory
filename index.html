@@ -145,10 +145,11 @@
     border:1px solid var(--stone-line); border-top:5px solid var(--teal-deep);
     padding:20px 20px 18px; display:flex; flex-direction:column; gap:10px;
     transition:transform .15s ease, box-shadow .15s ease;
+    min-width:0; overflow:hidden;
   }
   .card:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg);}
-  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
-  .card h3{font-size:1.18rem; line-height:1.25;}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; min-width:0;}
+  .card h3{font-size:1.18rem; line-height:1.25; overflow-wrap:anywhere; word-break:break-word;}
   .badge-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;}
   .badge{
     font-family:'Poppins',sans-serif; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em;
@@ -162,9 +163,16 @@
   .stars .star-display{color:var(--gold); letter-spacing:1px;}
   .stars .rating-count{color:var(--ink-soft); font-size:0.8rem;}
 
-  .card-meta{font-size:0.9rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:4px;}
-  .card-meta a{text-decoration:none; font-weight:600;}
-  .card-meta .notes{color:var(--ink); font-size:0.87rem; margin-top:2px; line-height:1.45;}
+  .card-meta{font-size:0.9rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:4px; min-width:0;}
+  .card-meta a{
+    text-decoration:none; font-weight:600;
+    overflow-wrap:anywhere; word-break:break-word;
+    display:block; min-width:0;
+  }
+  .card-meta .notes{
+    color:var(--ink); font-size:0.87rem; margin-top:2px; line-height:1.45;
+    overflow-wrap:anywhere; word-break:break-word;
+  }
 
   .card-actions{display:flex; gap:8px; margin-top:auto; padding-top:8px; flex-wrap:wrap;}
   .btn{
@@ -181,14 +189,17 @@
   .btn.danger{border-color:#B5473C; color:#B5473C;}
   .btn.danger:hover{background:#B5473C; color:var(--white);}
 
-  .comments-panel{border-top:1px dashed var(--stone-line); margin-top:6px; padding-top:12px; display:none;}
+  .comments-panel{border-top:1px dashed var(--stone-line); margin-top:6px; padding-top:12px; display:none; min-width:0;}
   .comments-panel.open{display:block;}
-  .comment{padding:9px 0; border-bottom:1px solid var(--stone-cream); font-size:0.87rem;}
+  .comment{padding:9px 0; border-bottom:1px solid var(--stone-cream); font-size:0.87rem; min-width:0;}
   .comment:last-child{border-bottom:none;}
-  .comment-head{display:flex; justify-content:space-between; align-items:center;}
-  .comment-head b{font-family:'Poppins',sans-serif; font-size:0.82rem;}
-  .comment .stars{font-size:0.8rem;}
-  .comment-text{margin-top:2px; color:var(--ink-soft);}
+  .comment-head{display:flex; justify-content:space-between; align-items:flex-start; gap:8px; min-width:0;}
+  .comment-head b{
+    font-family:'Poppins',sans-serif; font-size:0.82rem;
+    overflow-wrap:anywhere; word-break:break-word; min-width:0;
+  }
+  .comment .stars{font-size:0.8rem; flex-shrink:0; white-space:nowrap;}
+  .comment-text{margin-top:2px; color:var(--ink-soft); overflow-wrap:anywhere; word-break:break-word;}
   .no-comments{color:var(--ink-soft); font-size:0.85rem; font-style:italic;}
 
   .add-comment-form{margin-top:12px; background:var(--stone-cream); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;}
@@ -308,7 +319,8 @@
 
 <footer>
   <div class="stamp">Shadow Wood looks out for Shadow Wood.</div>
-  Built by neighbors, for neighbors. Have a recommendation? Ask an admin to add it.
+  Built by neighbors, for neighbors. Have a recommendation, correction, or question?
+  Email <a href="mailto:shadowwooddirectory@gmail.com">shadowwooddirectory@gmail.com</a>.
 </footer>
 
 <button id="adminFab" title="Admin">🔒</button>
@@ -390,7 +402,7 @@ const firebaseConfig = {
    reuse a password you use elsewhere. It's just meant to keep casual
    visitors from editing the directory, not to be bank-grade security.
    ====================================================================== */
-const ADMIN_PASSWORD = "Shadowwood2013";
+const ADMIN_PASSWORD = "ShadowWood$Admin25";
 
 /* ---------------------------------------------------------------------- */
 
