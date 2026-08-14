@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Wood Directory — Neighbor-Recommended Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-cream:#F5EFE3;
+    --stone-warm:#EAE1C9;
+    --stone-line:#D8CBA8;
+    --teal-deep:#2C6B6B;
+    --teal-dark:#1B4444;
+    --coral:#D9714F;
+    --pink-flower:#C15C7C;
+    --leaf-green:#5B7A4F;
+    --gold:#C9A227;
+    --ink:#23302C;
+    --ink-soft:#5B6560;
+    --white:#FFFDF8;
+    --radius:14px;
+    --shadow:0 4px 18px rgba(35,48,44,0.10);
+    --shadow-lg:0 12px 40px rgba(35,48,44,0.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--stone-cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif; margin:0; color:var(--teal-dark);}
+  .label{
+    font-family:'Poppins',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.09em;
+    font-weight:600;
+  }
+  a{color:var(--teal-deep);}
+  button{font-family:inherit; cursor:pointer;}
+
+  /* ---------- SETUP OVERLAY ---------- */
+  #setupOverlay{
+    position:fixed; inset:0; background:rgba(27,68,68,0.94); color:var(--white);
+    z-index:9999; display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  #setupOverlay .box{max-width:560px; background:var(--teal-dark); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius); padding:32px; box-shadow:var(--shadow-lg);}
+  #setupOverlay h2{color:var(--white); font-size:1.5rem; margin-bottom:12px;}
+  #setupOverlay p{color:#DCEAE7; font-size:0.95rem;}
+  #setupOverlay code{background:rgba(255,255,255,0.12); padding:2px 6px; border-radius:4px; font-size:0.85em;}
+  .hidden{display:none !important;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:96px 24px 120px;
+    text-align:center;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -10%, rgba(217,113,79,0.30), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 10% 110%, rgba(91,122,79,0.35), transparent 60%),
+      linear-gradient(160deg, #1B4444 0%, #2C6B6B 55%, #234F4E 100%);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:56px;
+    background-image: radial-gradient(circle at 10px 0, transparent 9px, rgba(245,239,227,0.85) 10px);
+    background-size: 32px 32px;
+    background-repeat: repeat-x;
+    background-position: bottom;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:140px;
+    background:linear-gradient(180deg, rgba(245,239,227,0) 0%, var(--stone-cream) 100%);
+  }
+  .hero-inner{position:relative; z-index:2; max-width:760px; margin:0 auto;}
+  .hero .eyebrow{
+    font-family:'Poppins',sans-serif;
+    color:var(--white);
+    font-size:clamp(1.8rem, 4.5vw, 3.1rem);
+    letter-spacing:0.05em;
+    font-weight:700;
+    margin-bottom:14px;
+    display:inline-block;
+    text-shadow:0 3px 24px rgba(0,0,0,0.35);
+  }
+  .hero h1{
+    color:#F3D9C9;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:clamp(1.3rem, 2.6vw, 1.9rem);
+    letter-spacing:0.01em;
+    text-transform:none;
+    font-weight:500;
+    text-shadow:0 2px 16px rgba(0,0,0,0.3);
+  }
+  .hero .sub{
+    color:#EFE7D6; font-family:'Fraunces',serif; font-style:italic; font-weight:400;
+    font-size:1.25rem; margin-top:14px; letter-spacing:0.01em;
+  }
+  .hero-stats{
+    margin-top:34px; display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
+  }
+  .hero-stats div{color:var(--white); font-family:'Poppins',sans-serif;}
+  .hero-stats strong{display:block; font-size:1.6rem; font-family:'Fraunces',serif;}
+  .hero-stats span{font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; opacity:0.85;}
+
+  /* ---------- CONTROLS ---------- */
+  .controls-wrap{position:relative; z-index:3; margin:-72px auto 40px; max-width:960px; padding:0 20px;}
+  .controls{
+    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow-lg);
+    padding:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+    border:1px solid var(--stone-line);
+  }
+  .controls input[type=text], .controls select{
+    font-family:'Inter',sans-serif; font-size:0.95rem;
+    padding:11px 14px; border-radius:9px; border:1.5px solid var(--stone-line);
+    background:var(--stone-cream); color:var(--ink);
+  }
+  .controls input[type=text]{flex:2 1 220px;}
+  .controls select{flex:1 1 160px;}
+  .controls input:focus, .controls select:focus{outline:2px solid var(--teal-deep); outline-offset:1px;}
+  .toggle-chip{
+    display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--ink-soft);
+    background:var(--stone-cream); border:1.5px solid var(--stone-line); border-radius:9px;
+    padding:10px 14px; white-space:nowrap;
+  }
+  .toggle-chip input{accent-color:var(--teal-deep); width:16px; height:16px;}
+
+  main{max-width:1080px; margin:0 auto; padding:0 20px 80px;}
+  .section-head{display:flex; justify-content:space-between; align-items:baseline; margin:8px 0 22px; flex-wrap:wrap; gap:8px;}
+  .section-head h2{font-size:1.5rem;}
+  .count-note{color:var(--ink-soft); font-size:0.88rem;}
+
+  /* ---------- GRID / CARDS ---------- */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:20px;}
+  .card{
+    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
+    border:1px solid var(--stone-line); border-top:5px solid var(--teal-deep);
+    padding:20px 20px 18px; display:flex; flex-direction:column; gap:10px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{transform:translateY(-2px); box-shadow:var(--shadow-lg);}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .card h3{font-size:1.18rem; line-height:1.25;}
+  .badge-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;}
+  .badge{
+    font-family:'Poppins',sans-serif; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.06em;
+    padding:4px 9px; border-radius:20px; font-weight:600; white-space:nowrap;
+  }
+  .badge.category{background:var(--stone-warm); color:var(--teal-dark);}
+  .badge.neighbor{background:#E9F1E4; color:var(--leaf-green); border:1px solid #C7DBBC;}
+  .badge.neighbor::before{content:"🏡 "; }
+
+  .stars{display:flex; align-items:center; gap:5px; font-size:0.95rem;}
+  .stars .star-display{color:var(--gold); letter-spacing:1px;}
+  .stars .rating-count{color:var(--ink-soft); font-size:0.8rem;}
+
+  .card-meta{font-size:0.9rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:4px;}
+  .card-meta a{text-decoration:none; font-weight:600;}
+  .card-meta .notes{color:var(--ink); font-size:0.87rem; margin-top:2px; line-height:1.45;}
+
+  .card-actions{display:flex; gap:8px; margin-top:auto; padding-top:8px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Poppins',sans-serif; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em;
+    font-weight:600; padding:9px 14px; border-radius:8px; border:1.5px solid var(--teal-deep);
+    background:transparent; color:var(--teal-deep); transition:background .15s, color .15s;
+  }
+  .btn:hover{background:var(--teal-deep); color:var(--white);}
+  .btn.solid{background:var(--teal-deep); color:var(--white);}
+  .btn.solid:hover{background:var(--teal-dark);}
+  .btn.ghost-coral{border-color:var(--coral); color:var(--coral);}
+  .btn.ghost-coral:hover{background:var(--coral); color:var(--white);}
+  .btn.small{padding:6px 10px; font-size:0.66rem;}
+  .btn.danger{border-color:#B5473C; color:#B5473C;}
+  .btn.danger:hover{background:#B5473C; color:var(--white);}
+
+  .comments-panel{border-top:1px dashed var(--stone-line); margin-top:6px; padding-top:12px; display:none;}
+  .comments-panel.open{display:block;}
+  .comment{padding:9px 0; border-bottom:1px solid var(--stone-cream); font-size:0.87rem;}
+  .comment:last-child{border-bottom:none;}
+  .comment-head{display:flex; justify-content:space-between; align-items:center;}
+  .comment-head b{font-family:'Poppins',sans-serif; font-size:0.82rem;}
+  .comment .stars{font-size:0.8rem;}
+  .comment-text{margin-top:2px; color:var(--ink-soft);}
+  .no-comments{color:var(--ink-soft); font-size:0.85rem; font-style:italic;}
+
+  .add-comment-form{margin-top:12px; background:var(--stone-cream); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px;}
+  .add-comment-form input[type=text], .add-comment-form textarea{
+    font-family:'Inter',sans-serif; padding:9px 11px; border-radius:7px; border:1.5px solid var(--stone-line); font-size:0.87rem; background:var(--white);
+  }
+  .add-comment-form textarea{resize:vertical; min-height:56px;}
+  .star-picker{display:flex; gap:4px; font-size:1.35rem; cursor:pointer; user-select:none;}
+  .star-picker span{color:#D8CBA8; transition:color .1s;}
+  .star-picker span.active{color:var(--gold);}
+
+  .empty-state{text-align:center; padding:60px 20px; color:var(--ink-soft);}
+  .empty-state h3{color:var(--teal-dark); margin-bottom:8px;}
+
+  /* ---------- ADMIN ---------- */
+  #adminFab{
+    position:fixed; bottom:22px; right:22px; z-index:50;
+    width:50px; height:50px; border-radius:50%; background:var(--teal-dark); color:var(--white);
+    border:none; box-shadow:var(--shadow-lg); font-size:1.25rem; display:flex; align-items:center; justify-content:center;
+  }
+  #adminFab.active{background:var(--coral);}
+  #adminBar{
+    position:sticky; top:0; z-index:40; background:var(--teal-dark); color:var(--white);
+    padding:10px 20px; display:none; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    font-family:'Poppins',sans-serif; font-size:0.8rem; letter-spacing:0.03em;
+  }
+  #adminBar.open{display:flex;}
+  #adminBar .btn{border-color:var(--white); color:var(--white);}
+  #adminBar .btn:hover{background:var(--white); color:var(--teal-dark);}
+
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(27,44,42,0.55); z-index:200;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+  }
+  .modal{
+    background:var(--white); border-radius:var(--radius); padding:28px; max-width:460px; width:100%;
+    box-shadow:var(--shadow-lg); max-height:88vh; overflow-y:auto;
+  }
+  .modal h2{font-size:1.3rem; margin-bottom:16px;}
+  .field{display:flex; flex-direction:column; gap:5px; margin-bottom:13px;}
+  .field label{font-family:'Poppins',sans-serif; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft);}
+  .field input[type=text], .field input[type=tel], .field input[type=url], .field textarea, .field select, .field input[type=password]{
+    padding:10px 12px; border-radius:8px; border:1.5px solid var(--stone-line); font-family:'Inter',sans-serif; font-size:0.92rem;
+  }
+  .field textarea{resize:vertical; min-height:64px;}
+  .field.checkbox{flex-direction:row; align-items:center; gap:9px;}
+  .field.checkbox input{width:17px; height:17px; accent-color:var(--teal-deep);}
+  .modal-actions{display:flex; gap:10px; margin-top:6px; justify-content:flex-end;}
+
+  footer{text-align:center; padding:40px 20px 50px; color:var(--ink-soft); font-size:0.82rem;}
+  footer .stamp{font-family:'Fraunces',serif; font-style:italic; color:var(--teal-deep); font-size:1rem; margin-bottom:6px;}
+
+  @media (max-width:560px){
+    .hero{padding:70px 18px 100px;}
+    .controls{padding:16px;}
+    .controls-wrap{margin-top:-56px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= SETUP OVERLAY (shown only until Firebase config is filled in) ================= -->
+<div id="setupOverlay">
+  <div class="box">
+    <h2>⚙️ One-time setup needed</h2>
+    <p>This app is ready to go, but it needs to be connected to a free Firebase database before it can save data. Open <code>FIREBASE_SETUP.md</code> (included alongside this file) and follow the steps — it takes about 10 minutes. Then paste your config into the <code>firebaseConfig</code> object near the top of this file's <code>&lt;script&gt;</code> section and re-open the page.</p>
+    <p>Already done this? Then <code>firebaseConfig</code> still has a placeholder value — double-check you saved the file after pasting your keys.</p>
+  </div>
+</div>
+
+<!-- ================= ADMIN BAR ================= -->
+<div id="adminBar">
+  <span>🔓 Admin mode — you can add, edit, and remove businesses.</span>
+  <div style="display:flex; gap:8px;">
+    <button class="btn" id="openAddBtn">+ Add business</button>
+    <button class="btn" id="logoutAdminBtn">Exit admin</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="label eyebrow">Shadow Wood</span>
+    <h1>Coral Springs, FL</h1>
+    <p class="sub">Trusted picks from your neighbors.</p>
+    <div class="hero-stats">
+      <div><strong id="statTotal">–</strong><span>Businesses listed</span></div>
+      <div><strong id="statNeighbor">–</strong><span>Neighbor-owned</span></div>
+      <div><strong id="statReviews">–</strong><span>Neighbor reviews</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls-wrap">
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search a company, service, or keyword…">
+    <select id="categorySelect"><option value="">All categories</option></select>
+    <select id="sortSelect">
+      <option value="name">Sort: A–Z</option>
+      <option value="rating">Sort: Highest rated</option>
+      <option value="reviews">Sort: Most reviewed</option>
+    </select>
+    <label class="toggle-chip"><input type="checkbox" id="neighborOnly"> Neighbor-owned only</label>
+  </div>
+</div>
+
+<main>
+  <div class="section-head">
+    <h2>The Directory</h2>
+    <span class="count-note" id="resultCount"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty-state hidden" id="emptyState">
+    <h3>No matches yet</h3>
+    <p>Try a different search or category — or be the first to add one if you're an admin.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="stamp">Shadow Wood looks out for Shadow Wood.</div>
+  Built by neighbors, for neighbors. Have a recommendation? Ask an admin to add it.
+</footer>
+
+<button id="adminFab" title="Admin">🔒</button>
+
+<!-- ================= ADD / EDIT BUSINESS MODAL ================= -->
+<div class="modal-backdrop hidden" id="businessModalBackdrop">
+  <div class="modal">
+    <h2 id="businessModalTitle">Add a business</h2>
+    <input type="hidden" id="editingId">
+    <div class="field">
+      <label>Company / contact name</label>
+      <input type="text" id="f_name" placeholder="e.g. Dorado Roofing">
+    </div>
+    <div class="field">
+      <label>Category / service type</label>
+      <input type="text" id="f_category" list="categoryList" placeholder="e.g. Roofing, Electrician, House Cleaning">
+      <datalist id="categoryList"></datalist>
+    </div>
+    <div class="field">
+      <label>Phone</label>
+      <input type="tel" id="f_phone" placeholder="(954) 555-0123">
+    </div>
+    <div class="field">
+      <label>Website / social handle</label>
+      <input type="text" id="f_website" placeholder="https:// or @handle">
+    </div>
+    <div class="field">
+      <label>Notes (referral source, specialty, pricing, etc.)</label>
+      <textarea id="f_notes" placeholder="Anything neighbors should know"></textarea>
+    </div>
+    <div class="field checkbox">
+      <input type="checkbox" id="f_neighborOwned">
+      <label style="text-transform:none; font-size:0.9rem; letter-spacing:0;">The owner is a Shadow Wood neighbor</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="cancelBusinessBtn">Cancel</button>
+      <button class="btn solid" id="saveBusinessBtn">Save business</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ADMIN LOGIN MODAL ================= -->
+<div class="modal-backdrop hidden" id="loginModalBackdrop">
+  <div class="modal" style="max-width:360px;">
+    <h2>Admin login</h2>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="adminPasswordInput" placeholder="••••••••">
+    </div>
+    <p id="loginError" style="color:#B5473C; font-size:0.85rem; display:none;">Incorrect password.</p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelLoginBtn">Cancel</button>
+      <button class="btn solid" id="submitLoginBtn">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase (compat build — simplest to use without a bundler) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+/* ======================================================================
+   1) FIREBASE CONFIG — paste your own project's keys here.
+   Get these by following FIREBASE_SETUP.md (included with this app).
+   ====================================================================== */
+const firebaseConfig = {
+  apiKey: "AIzaSyC07Rk3qIjaSR3SA_wlpe0dGdcVmBFmubw",
+  authDomain: "shadowood-directory.firebaseapp.com",
+  projectId: "shadowood-directory",
+  storageBucket: "shadowood-directory.firebasestorage.app",
+  messagingSenderId: "304603593693",
+  appId: "1:304603593693:web:526d1ceccc8f1d632a1434"
+};
+
+/* ======================================================================
+   2) ADMIN PASSWORD — change this before you publish the site!
+   Anyone who views the page source can technically see this, so don't
+   reuse a password you use elsewhere. It's just meant to keep casual
+   visitors from editing the directory, not to be bank-grade security.
+   ====================================================================== */
+const ADMIN_PASSWORD = "Shadowwood2013";
+
+/* ---------------------------------------------------------------------- */
+
+const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_");
+if (!isConfigured) {
+  // Leave the setup overlay showing and stop here.
+  console.warn("Firebase is not configured yet. See FIREBASE_SETUP.md.");
+} else {
+  document.getElementById('setupOverlay').classList.add('hidden');
+}
+
+let db = null;
+if (isConfigured) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+}
+
+/* ---------------------------------------------------------------------- */
+/* Starter directory — seeded into Firestore automatically the first     */
+/* time the app runs, if the "businesses" collection is empty. After     */
+/* that, everything lives in Firestore and this list is never used again.*/
+/* ---------------------------------------------------------------------- */
+const STARTER_BUSINESSES = [
+{name:"The AC Guy", category:"AC Repair", phone:"954-970-0888", website:"", notes:"441 Margate, FL 33063", neighborOwned:true, seedComment:"John, the owner, is our neighbor.", seedRating:5},
+{name:"Joseph Chrisler", category:"AC Repair", phone:"(954) 652-8882", website:"", notes:"", neighborOwned:false},
+{name:"Los Chilanguitos", category:"Catering / Food Truck", phone:"954-910-8855 & 954-910-8864", website:"", notes:"Currently at Coral Square Mall food court (Arepasmania). Tacos, burritos, quesadillas, arepas.", neighborOwned:true, seedComment:"They're amazing!!!!", seedRating:5},
+{name:"Auto Collision", category:"Auto Collision", phone:"954-341-8966", website:"", notes:"", neighborOwned:false},
+{name:"Sourdough Bakery", category:"Bakery", phone:"954-299-9158", website:"https://bakesy.shop/b/dough-forrest-dough", notes:"", neighborOwned:true},
+{name:"Precision Fabio", category:"Bathroom Renovation", phone:"464-912-2797", website:"", notes:"Referred by neighbor Amanda.", neighborOwned:false},
+{name:"Quality Refinishing South Florida", category:"Bathtub Restoration", phone:"954-200-1966", website:"", notes:"Contact: Casey Sirens.", neighborOwned:false},
+{name:"Captain Ron", category:"BBQ Catering", phone:"(386) 453-4168", website:"Instagram @captainroncooks", notes:"", neighborOwned:true},
+{name:"Quality Built Transmission", category:"Car Transmission", phone:"954-428-5440", website:"", notes:"Deerfield Beach. Referred by neighbor Pedro.", neighborOwned:false},
+{name:"Ty's Auto Detailing Service", category:"Car Wash / Detailing", phone:"954-773-4428", website:"", notes:"", neighborOwned:true},
+{name:"FAP 1034 Ventures LLC Services", category:"Credit Repair / Loans / Taxes", phone:"954-934-7862", website:"", notes:"Credit repair, loan modification, taxes, document prep, startup consulting, private money & SBA loans, real estate investing, transcriptions (English & Spanish).", neighborOwned:true},
+{name:"Flavorful Nutrition", category:"Culinary Registered Dietitian", phone:"", website:"Flavorfulnutrition.com", notes:"", neighborOwned:true},
+{name:"Collegiate Sealers", category:"Driveway Sealers", phone:"(954) 733-7309", website:"https://www.sealmydriveway.com/", notes:"", neighborOwned:false, seedComment:"Affordable, but I wasn't thrilled with the seal after a few days.", seedRating:3},
+{name:"Sealcoating Patch Repair & Restoration", category:"Driveway Sealers", phone:"954-740-976", website:"", notes:"", neighborOwned:false, seedComment:"Great work, all done by the owner.", seedRating:5},
+{name:"Noah", category:"Electrician", phone:"954-655-7912", website:"", notes:"", neighborOwned:false},
+{name:"Braxton Richards", category:"Electrician", phone:"(754) 215-2144", website:"", notes:"", neighborOwned:false},
+{name:"Charlie", category:"Electrician", phone:"(786) 597-0201", website:"", notes:"", neighborOwned:false},
+{name:"TMP Electric", category:"Electrician", phone:"954-643-1164", website:"", notes:"", neighborOwned:false},
+{name:"Off Duty Fencing", category:"Fence", phone:"954-658-4381", website:"", notes:"Referred by Nina.", neighborOwned:false},
+{name:"Chris Miller", category:"Glass — Bathroom", phone:"954-553-9862", website:"", notes:"", neighborOwned:true},
+{name:"Ben Bernal — Golf Cart Sales & Rentals", category:"Golf Cart Sale & Rent", phone:"(954) 496-1210", website:"", notes:"", neighborOwned:true},
+{name:"Rodney's Services", category:"Handyman", phone:"754-282-0527", website:"", notes:"", neighborOwned:true},
+{name:"CJ Home Repairs and Renovations", category:"Home Remodeling / Renovations", phone:"954-592-5855", website:"CJ Smooth", notes:"", neighborOwned:true, seedComment:"10/10.", seedRating:5},
+{name:"Alli", category:"House Cleaning", phone:"816-812-5221", website:"", notes:"Referred by Haley.", neighborOwned:false},
+{name:"Jonnae", category:"House Cleaning", phone:"954-200-4736", website:"", notes:"Referred by neighbor JJ.", neighborOwned:false},
+{name:"Anna Rivera", category:"House Cleaning & Organizing", phone:"954-870-8951", website:"", notes:"Referred by neighbor Antoinette.", neighborOwned:false},
+{name:"M.J.S Cooling Services LLC", category:"HVAC", phone:"(954) 287-0312", website:"", notes:"AC installation with proper system sizing and clean workmanship; also services offices, retail, and facilities. Licensed and insured. Gina's brother — a neighbor.", neighborOwned:true},
+{name:"BNT", category:"Impact Doors and Windows", phone:"561-504-6104", website:"", notes:"Neighbor Amy works there.", neighborOwned:false},
+{name:"Crystal Clear Glass and Mirror", category:"Impact Doors and Windows", phone:"", website:"https://www.crystalclearglassandmirror.net/", notes:"", neighborOwned:true},
+{name:"Neptune Impact Windows & Doors", category:"Impact Windows & Doors", phone:"954-802-9003", website:"Neptuneimpactwindows.com", notes:"Firefighter owned.", neighborOwned:false},
+{name:"Joe — Pro Inspectors", category:"Home Inspector", phone:"954-283-8989", website:"", notes:"Referred by Gina.", neighborOwned:false},
+{name:"Keith Curotz", category:"Home Inspector", phone:"305-323-7627", website:"", notes:"Referred by Lina.", neighborOwned:false},
+{name:"Jorge", category:"Locksmith", phone:"954-445-3030", website:"", notes:"Referred by Angie.", neighborOwned:false},
+{name:"Starheart Microbakery", category:"Bakery", phone:"", website:"https://www.hotplate.com/starheartmicrobakery", notes:"@starheartmicrobakery on IG — based in Coral Springs.", neighborOwned:false},
+{name:"Paid Clinical Trials", category:"Other", phone:"954-740-2789", website:"", notes:"Contact Katherine, from Shadow Wood.", neighborOwned:true},
+{name:"Idalia", category:"Notary", phone:"954-829-7962", website:"", notes:"", neighborOwned:true},
+{name:"Shannon Raskob", category:"Notary", phone:"305-304-1944", website:"", notes:"", neighborOwned:false},
+{name:"Painting & Pressure Cleaning", category:"Painting", phone:"954-573-5887 / 754-245-0699", website:"", notes:"", neighborOwned:false, seedComment:"Very affordable, clean work.", seedRating:5},
+{name:"Southern Sky Painting", category:"Painting", phone:"561-818-1258", website:"https://southernskypainting.com/", notes:"", neighborOwned:false},
+{name:"Five Star Pavers & Pool Remodels", category:"Pavers", phone:"954-793-9508", website:"https://www.fivestarpaversandpoolremodels.com/", notes:"", neighborOwned:true},
+{name:"TKE", category:"Pest Control", phone:"(954) 952-1881", website:"", notes:"", neighborOwned:false},
+{name:"Day-Dream Photography, LLC", category:"Photography", phone:"786-803-6710", website:"https://day-dreamphotographyllc.godaddysites.com/", notes:"Specializes in maternity, newborn, and family sessions.", neighborOwned:true, seedComment:"Amazing work!", seedRating:5},
+{name:"Prestige Plumbing Services Inc", category:"Plumbing", phone:"954-651-0516", website:"", notes:"No 24-hour service.", neighborOwned:true},
+{name:"Five Star Pavers & Pool Remodels", category:"Pool", phone:"954-793-9508", website:"https://www.fivestarpaversandpoolremodels.com/", notes:"", neighborOwned:true},
+{name:"Wash Pro", category:"Pool Cleaner", phone:"(954) 870-9646", website:"https://washproflorida.com/pool-cleaning/", notes:"Recommended by neighbor Kevin Bream.", neighborOwned:false},
+{name:"Baby Guard Pool Fence", category:"Pool Fence", phone:"888-919-2229", website:"https://www.babyguardfence.com/", notes:"", neighborOwned:false},
+{name:"Puya Pools", category:"Pool Services", phone:"(754) 802-6759", website:"https://www.puyapools.com/", notes:"", neighborOwned:false},
+{name:"SoFlo Wash Solutions LLC", category:"Pressure Cleaning", phone:"954-501-9616", website:"", notes:"A neighbor's son owns this business.", neighborOwned:true},
+{name:"Claim Pros", category:"Public Adjuster", phone:"954-650-6444", website:"", notes:"Owner: Cory.", neighborOwned:true},
+{name:"Ryan John Lynch — Charles Rutenberg Realty, LLC", category:"Real Estate Agent", phone:"954-736-6778", website:"mysouthfloridarealtor.com", notes:"Shadow Wood resident with 10+ years of experience. Facebook: facebook.com/ryanlynchfl", neighborOwned:true},
+{name:"William Rodriguez", category:"Real Estate Agent", phone:"305-218-3803", website:"", notes:"Neighbor — Golf Cart Parade member.", neighborOwned:true},
+{name:"Jess Schoenthaler", category:"Realtor", phone:"954-471-2974", website:"", notes:"", neighborOwned:true},
+{name:"Marisol Giraldo", category:"Realtor", phone:"954-559-3553", website:"United Realty Group", notes:"", neighborOwned:true},
+{name:"Plumbing SFL", category:"Plumbing / Renovations", phone:"754-232-7614", website:"facebook.com/plumbingsfl", notes:"", neighborOwned:false},
+{name:"Painting & Pressure Cleaning", category:"Roof Pressure Cleaning", phone:"954-573-5887 / 754-245-0699", website:"", notes:"", neighborOwned:false},
+{name:"Dorado Roofing", category:"Roofing", phone:"954-278-5168", website:"Doradoroofingfl.com", notes:"", neighborOwned:true},
+{name:"DanaStar", category:"Sprinklers", phone:"954-451-4264", website:"", notes:"Junior is the owner — quality work.", neighborOwned:false}
+];
+
+/* ---------------------------------------------------------------------- */
+/* State                                                                   */
+/* ---------------------------------------------------------------------- */
+let businesses = [];   // [{id, name, category, phone, website, notes, neighborOwned}]
+let comments = {};     // { businessId: [{id, author, rating, text}] }
+let isAdmin = sessionStorage.getItem('sw_admin') === 'true';
+let openPanels = new Set();
+
+const grid = document.getElementById('grid');
+const emptyState = document.getElementById('emptyState');
+const resultCount = document.getElementById('resultCount');
+const categorySelect = document.getElementById('categorySelect');
+
+function starString(avg){
+  const rounded = Math.round(avg);
+  return '★'.repeat(rounded) + '☆'.repeat(5-rounded);
+}
+
+function avgRating(list){
+  if(!list || !list.length) return 0;
+  return list.reduce((s,c)=>s+(c.rating||0),0) / list.length;
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function formatWebsite(w){
+  if(!w) return '';
+  if(w.startsWith('http')) return w;
+  if(w.startsWith('@')) return `https://instagram.com/${w.slice(1)}`;
+  if(w.includes('.')) return `https://${w}`;
+  return '';
+}
+
+/* ---------------------------------------------------------------------- */
+/* Rendering                                                               */
+/* ---------------------------------------------------------------------- */
+function populateCategoryFilter(){
+  const cats = [...new Set(businesses.map(b=>b.category).filter(Boolean))].sort();
+  categorySelect.innerHTML = '<option value="">All categories</option>' +
+    cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  document.getElementById('categoryList').innerHTML =
+    cats.map(c=>`<option value="${escapeHtml(c)}">`).join('');
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent = businesses.length;
+  document.getElementById('statNeighbor').textContent = businesses.filter(b=>b.neighborOwned).length;
+  const totalReviews = Object.values(comments).reduce((s,l)=>s+l.length,0);
+  document.getElementById('statReviews').textContent = totalReviews;
+}
+
+function getFiltered(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const cat = categorySelect.value;
+  const neighborOnly = document.getElementById('neighborOnly').checked;
+  const sortBy = document.getElementById('sortSelect').value;
+
+  let list = businesses.filter(b=>{
+    if(cat && b.category !== cat) return false;
+    if(neighborOnly && !b.neighborOwned) return false;
+    if(q){
+      const hay = `${b.name} ${b.category} ${b.notes} ${b.phone}`.toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  if(sortBy === 'rating'){
+    list.sort((a,b)=> avgRating(comments[b.id]) - avgRating(comments[a.id]));
+  } else if(sortBy === 'reviews'){
+    list.sort((a,b)=> (comments[b.id]?.length||0) - (comments[a.id]?.length||0));
+  } else {
+    list.sort((a,b)=> a.name.localeCompare(b.name));
+  }
+  return list;
+}
+
+function render(){
+  const list = getFiltered();
+  resultCount.textContent = `${list.length} of ${businesses.length} shown`;
+  grid.innerHTML = '';
+  emptyState.classList.toggle('hidden', list.length > 0);
+
+  list.forEach(b=>{
+    const bComments = comments[b.id] || [];
+    const avg = avgRating(bComments);
+    const websiteUrl = formatWebsite(b.website);
+    const panelOpen = openPanels.has(b.id);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-top">
+        <div>
+          <h3>${escapeHtml(b.name)}</h3>
+          <div class="badge-row">
+            ${b.category ? `<span class="badge category">${escapeHtml(b.category)}</span>` : ''}
+            ${b.neighborOwned ? `<span class="badge neighbor">Neighbor owned</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="stars">
+        <span class="star-display">${bComments.length ? starString(avg) : '☆☆☆☆☆'}</span>
+        <span class="rating-count">${bComments.length ? avg.toFixed(1)+' · '+bComments.length+' review'+(bComments.length===1?'':'s') : 'No reviews yet'}</span>
+      </div>
+      <div class="card-meta">
+        ${b.phone ? `<a href="tel:${b.phone.replace(/[^0-9+]/g,'')}">📞 ${escapeHtml(b.phone)}</a>` : ''}
+        ${websiteUrl ? `<a href="${escapeHtml(websiteUrl)}" target="_blank" rel="noopener">🔗 ${escapeHtml(b.website)}</a>` : (b.website ? `<span>🔗 ${escapeHtml(b.website)}</span>` : '')}
+        ${b.notes ? `<div class="notes">${escapeHtml(b.notes)}</div>` : ''}
+      </div>
+      <div class="card-actions">
+        <button class="btn small toggle-comments-btn">${panelOpen ? 'Hide reviews' : 'View & add reviews'}</button>
+        ${isAdmin ? `<button class="btn small edit-btn">Edit</button><button class="btn small danger delete-btn">Delete</button>` : ''}
+      </div>
+      <div class="comments-panel ${panelOpen ? 'open':''}">
+        <div class="comments-list">
+          ${bComments.length ? bComments.map(c=>`
+            <div class="comment">
+              <div class="comment-head">
+                <b>${escapeHtml(c.author || 'Neighbor')}</b>
+                <span class="stars">${starString(c.rating||0)}</span>
+              </div>
+              <div class="comment-text">${escapeHtml(c.text)}</div>
+            </div>
+          `).join('') : '<p class="no-comments">Be the first neighbor to leave a review.</p>'}
+        </div>
+        <div class="add-comment-form">
+          <input type="text" class="c_author" placeholder="Your name (optional)">
+          <div class="star-picker" data-value="0">
+            ${[1,2,3,4,5].map(n=>`<span data-n="${n}">★</span>`).join('')}
+          </div>
+          <textarea class="c_text" placeholder="How did it go? What would other neighbors want to know?"></textarea>
+          <button class="btn solid small submit-comment-btn">Post review</button>
+        </div>
+      </div>
+    `;
+
+    // wire up interactions
+    card.querySelector('.toggle-comments-btn').addEventListener('click', ()=>{
+      if(openPanels.has(b.id)) openPanels.delete(b.id); else openPanels.add(b.id);
+      render();
+    });
+
+    const picker = card.querySelector('.star-picker');
+    picker.querySelectorAll('span').forEach(star=>{
+      star.addEventListener('click', ()=>{
+        const n = parseInt(star.dataset.n);
+        picker.dataset.value = n;
+        picker.querySelectorAll('span').forEach(s=> s.classList.toggle('active', parseInt(s.dataset.n) <= n));
+      });
+    });
+
+    card.querySelector('.submit-comment-btn').addEventListener('click', ()=>{
+      const author = card.querySelector('.c_author').value.trim();
+      const rating = parseInt(picker.dataset.value) || 0;
+      const text = card.querySelector('.c_text').value.trim();
+      if(!text || !rating){
+        alert('Please add a star rating and a short comment before posting.');
+        return;
+      }
+      addComment(b.id, author, rating, text);
+    });
+
+    if(isAdmin){
+      card.querySelector('.edit-btn').addEventListener('click', ()=> openBusinessModal(b));
+      card.querySelector('.delete-btn').addEventListener('click', ()=> deleteBusiness(b));
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+/* ---------------------------------------------------------------------- */
+/* Firestore I/O                                                          */
+/* ---------------------------------------------------------------------- */
+async function seedIfEmpty(){
+  const snap = await db.collection('businesses').limit(1).get();
+  if(!snap.empty) return;
+  const batch = db.batch();
+  STARTER_BUSINESSES.forEach(b=>{
+    const ref = db.collection('businesses').doc();
+    batch.set(ref, {
+      name: b.name, category: b.category, phone: b.phone || '',
+      website: b.website || '', notes: b.notes || '',
+      neighborOwned: !!b.neighborOwned,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    if(b.seedComment){
+      const cRef = db.collection('comments').doc();
+      batch.set(cRef, {
+        businessId: ref.id, author: 'Neighborhood note', rating: b.seedRating || 5,
+        text: b.seedComment, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  });
+  await batch.commit();
+}
+
+function listenToData(){
+  db.collection('businesses').orderBy('name').onSnapshot(snap=>{
+    businesses = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    populateCategoryFilter();
+    updateStats();
+    render();
+  });
+  db.collection('comments').orderBy('createdAt').onSnapshot(snap=>{
+    comments = {};
+    snap.docs.forEach(d=>{
+      const c = {id:d.id, ...d.data()};
+      if(!comments[c.businessId]) comments[c.businessId] = [];
+      comments[c.businessId].push(c);
+    });
+    updateStats();
+    render();
+  });
+}
+
+function addComment(businessId, author, rating, text){
+  db.collection('comments').add({
+    businessId, author: author || 'Neighbor', rating, text,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(err=> alert('Could not post review: ' + err.message));
+}
+
+function deleteBusiness(b){
+  if(!confirm(`Remove "${b.name}" from the directory? This can't be undone.`)) return;
+  db.collection('businesses').doc(b.id).delete()
+    .catch(err=> alert('Could not delete: ' + err.message));
+}
+
+/* ---------------------------------------------------------------------- */
+/* Admin: login / logout                                                  */
+/* ---------------------------------------------------------------------- */
+const adminFab = document.getElementById('adminFab');
+const adminBar = document.getElementById('adminBar');
+const loginBackdrop = document.getElementById('loginModalBackdrop');
+
+function refreshAdminUI(){
+  adminFab.textContent = isAdmin ? '🔓' : '🔒';
+  adminFab.classList.toggle('active', isAdmin);
+  adminBar.classList.toggle('open', isAdmin);
+  render();
+}
+
+adminFab.addEventListener('click', ()=>{
+  if(isAdmin){ adminBar.scrollIntoView({behavior:'smooth'}); return; }
+  document.getElementById('adminPasswordInput').value='';
+  document.getElementById('loginError').style.display='none';
+  loginBackdrop.classList.remove('hidden');
+  document.getElementById('adminPasswordInput').focus();
+});
+
+document.getElementById('cancelLoginBtn').addEventListener('click', ()=> loginBackdrop.classList.add('hidden'));
+
+document.getElementById('submitLoginBtn').addEventListener('click', ()=>{
+  const val = document.getElementById('adminPasswordInput').value;
+  if(val === ADMIN_PASSWORD){
+    isAdmin = true;
+    sessionStorage.setItem('sw_admin','true');
+    loginBackdrop.classList.add('hidden');
+    refreshAdminUI();
+  } else {
+    document.getElementById('loginError').style.display='block';
+  }
+});
+document.getElementById('adminPasswordInput').addEventListener('keydown', e=>{
+  if(e.key==='Enter') document.getElementById('submitLoginBtn').click();
+});
+
+document.getElementById('logoutAdminBtn').addEventListener('click', ()=>{
+  isAdmin = false;
+  sessionStorage.removeItem('sw_admin');
+  refreshAdminUI();
+});
+
+/* ---------------------------------------------------------------------- */
+/* Admin: add / edit business modal                                       */
+/* ---------------------------------------------------------------------- */
+const businessBackdrop = document.getElementById('businessModalBackdrop');
+
+function openBusinessModal(existing){
+  document.getElementById('businessModalTitle').textContent = existing ? 'Edit business' : 'Add a business';
+  document.getElementById('editingId').value = existing ? existing.id : '';
+  document.getElementById('f_name').value = existing ? existing.name : '';
+  document.getElementById('f_category').value = existing ? existing.category : '';
+  document.getElementById('f_phone').value = existing ? existing.phone : '';
+  document.getElementById('f_website').value = existing ? existing.website : '';
+  document.getElementById('f_notes').value = existing ? existing.notes : '';
+  document.getElementById('f_neighborOwned').checked = existing ? !!existing.neighborOwned : false;
+  businessBackdrop.classList.remove('hidden');
+  document.getElementById('f_name').focus();
+}
+
+document.getElementById('openAddBtn').addEventListener('click', ()=> openBusinessModal(null));
+document.getElementById('cancelBusinessBtn').addEventListener('click', ()=> businessBackdrop.classList.add('hidden'));
+
+document.getElementById('saveBusinessBtn').addEventListener('click', ()=>{
+  const id = document.getElementById('editingId').value;
+  const data = {
+    name: document.getElementById('f_name').value.trim(),
+    category: document.getElementById('f_category').value.trim(),
+    phone: document.getElementById('f_phone').value.trim(),
+    website: document.getElementById('f_website').value.trim(),
+    notes: document.getElementById('f_notes').value.trim(),
+    neighborOwned: document.getElementById('f_neighborOwned').checked
+  };
+  if(!data.name){ alert('Please enter a company or contact name.'); return; }
+
+  const promise = id
+    ? db.collection('businesses').doc(id).update(data)
+    : db.collection('businesses').add({...data, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+
+  promise.then(()=> businessBackdrop.classList.add('hidden'))
+         .catch(err=> alert('Could not save: ' + err.message));
+});
+
+/* ---------------------------------------------------------------------- */
+/* Filters                                                                 */
+/* ---------------------------------------------------------------------- */
+['searchInput'].forEach(id=> document.getElementById(id).addEventListener('input', render));
+['categorySelect','sortSelect','neighborOnly'].forEach(id=> document.getElementById(id).addEventListener('change', render));
+
+/* ---------------------------------------------------------------------- */
+/* Boot                                                                    */
+/* ---------------------------------------------------------------------- */
+if(isConfigured){
+  seedIfEmpty().then(listenToData).catch(err=>{
+    console.error(err);
+    alert('Could not connect to Firebase. Double-check your firebaseConfig values and Firestore security rules. See FIREBASE_SETUP.md.');
+  });
+  refreshAdminUI();
+}
+</script>
+</body>
+</html>
