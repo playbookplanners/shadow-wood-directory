@@ -272,7 +272,7 @@
 
 <!-- ================= ADMIN BAR ================= -->
 <div id="adminBar">
-  <span>🔓 Admin mode — you can add, edit, and remove businesses.</span>
+  <span>🔓 Admin mode — you can add, edit, and remove businesses. <span id="visitCount" style="opacity:0.8; margin-left:8px;"></span></span>
   <div style="display:flex; gap:8px;">
     <button class="btn" id="openAddBtn">+ Add business</button>
     <button class="btn" id="logoutAdminBtn">Exit admin</button>
@@ -812,6 +812,20 @@ document.getElementById('saveBusinessBtn').addEventListener('click', ()=>{
 ['categorySelect','sortSelect','neighborOnly'].forEach(id=> document.getElementById(id).addEventListener('change', render));
 
 /* ---------------------------------------------------------------------- */
+/* Visit counter \u2014 increments once per page load, visible to admins only */
+/* ---------------------------------------------------------------------- */
+function trackVisit(){
+  const ref = db.collection('meta').doc('visits');
+  ref.set({count: firebase.firestore.FieldValue.increment(1)}, {merge:true})
+    .catch(err=> console.warn('Visit tracking failed (check Firestore rules for /meta/):', err.message));
+  ref.onSnapshot(snap=>{
+    const count = snap.exists ? (snap.data().count || 0) : 0;
+    const el = document.getElementById('visitCount');
+    if(el) el.textContent = count.toLocaleString() + ' visits';
+  });
+}
+
+/* ---------------------------------------------------------------------- */
 /* Boot                                                                    */
 /* ---------------------------------------------------------------------- */
 if(isConfigured){
@@ -819,6 +833,7 @@ if(isConfigured){
     console.error(err);
     alert('Could not connect to Firebase. Double-check your firebaseConfig values and Firestore security rules. See FIREBASE_SETUP.md.');
   });
+  trackVisit();
   refreshAdminUI();
 }
 </script>
